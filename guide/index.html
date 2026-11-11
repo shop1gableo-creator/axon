@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guide Axon</title>
+<style>
+:root { --bg:#fafafa; --panel:#fff; --text:#111214; --muted:#5b616e; --line:#e6e7ea; --accent:#111214; --ok:#15803d; --warn:#b45309; --code:#f1f2f4; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#07080a; --panel:#111215; --text:#f2f3f5; --muted:#9aa0ab; --line:#23252b; --accent:#fff; --ok:#4ade80; --warn:#fbbf24; --code:#1a1c21; } }
+:root[data-theme="dark"] { --bg:#07080a; --panel:#111215; --text:#f2f3f5; --muted:#9aa0ab; --line:#23252b; --accent:#fff; --ok:#4ade80; --warn:#fbbf24; --code:#1a1c21; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:400 16px/1.6 Inter, "Segoe UI Variable", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+.wrap { display:grid; grid-template-columns: 250px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; gap: 48px; padding: 0 16px; }
+nav { position: sticky; top: 0; align-self: start; padding: 40px 0; max-height: 100vh; overflow:auto; }
+nav b { display:block; letter-spacing:.2em; font-size:13px; margin-bottom:22px; }
+nav a { display:block; color:var(--muted); text-decoration:none; padding:6px 0; font-size:14.5px; } nav a:hover { color:var(--text); }
+main { padding: 40px 0 120px; min-width: 0; }
+h1 { font-size: 46px; line-height:1.05; letter-spacing:-.035em; margin: 10px 0 14px; }
+h2 { font-size: 28px; letter-spacing:-.02em; margin: 72px 0 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+h3 { font-size: 18px; margin: 30px 0 6px; }
+p.lead { font-size: 19px; color: var(--muted); max-width: 680px; }
+.muted { color: var(--muted); }
+ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 20px 0; }
+ol.steps > li { counter-increment: s; position: relative; padding: 16px 18px 16px 62px; margin: 10px 0; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+ol.steps > li::before { content: counter(s); position: absolute; left: 18px; top: 15px; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--bg); font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+code, kbd { font-family: "Cascadia Code", Consolas, monospace; font-size: .88em; background: var(--code); padding: 2px 7px; border-radius: 6px; }
+pre { background: var(--code); padding: 14px 16px; border-radius: 12px; overflow-x: auto; font-size: 13.5px; line-height: 1.5; }
+pre code { background: none; padding: 0; }
+.note { border-left: 3px solid var(--warn); padding: 10px 16px; background: var(--panel); border-radius: 0 12px 12px 0; margin: 16px 0; }
+.good { border-left-color: var(--ok); }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14.5px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+.tree { font-family: "Cascadia Code", Consolas, monospace; font-size: 13.5px; line-height: 1.7; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; white-space: pre; overflow-x: auto; }
+.tree i { color: var(--muted); font-style: normal; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 16px 0; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.card b { display: block; margin-bottom: 4px; }
+.card span { color: var(--muted); font-size: 14.5px; }
+button.theme { position: fixed; top: 14px; right: 16px; border: 1px solid var(--line); background: var(--panel); color: var(--text); border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+@media (max-width: 860px) { .wrap { grid-template-columns: 1fr; gap: 0; } nav { position: static; padding: 24px 0 0; max-height: none; } nav a { display: inline-block; margin-right: 14px; } h1 { font-size: 36px; } }
+</style>
+</head>
+<body>
+<button class="theme" id="theme" type="button">Clair / sombre</button>
+<div class="wrap">
+<nav>
+  <b>AXON · GUIDE</b>
+  <a href="#installer">1. Installer</a>
+  <a href="#lancer">2. Premier lancement</a>
+  <a href="#claude">3. Brancher Claude</a>
+  <a href="#depannage">4. Ça ne marche pas ?</a>
+  <a href="#partage">5. Un cerveau à deux</a>
+  <a href="#structure">6. La structure</a>
+  <a href="#office">7. Excel, Word, PowerPoint</a>
+  <a href="#autres">8. Autres IA</a>
+  <a href="#desinstaller">9. Désinstaller</a>
+</nav>
+<main>
+  <p class="muted">Guide d'installation et d'utilisation · tout se fait sur ton PC, rien n'est envoyé ailleurs</p>
+  <h1>Ton second cerveau, branché sur tes IA.</h1>
+  <p class="lead">Axon est un dossier de notes reliées (dans ton Google Drive ou sur ton PC). Toi, tu le vois en 3D. Tes IA (Claude d'abord) le lisent, cherchent dedans, écrivent, modifient tes fichiers Excel et Word — sans jamais rien supprimer.</p>
+
+  <h2 id="installer">1. Installer Axon</h2>
+  <ol class="steps">
+    <li><b>Télécharge Axon.</b> Sur la page GitHub du projet : bouton vert <b>Code</b> → <b>Download ZIP</b>.</li>
+    <li><b>Décompresse le ZIP</b> (clic droit → <i>Extraire tout…</i>), n'importe où (Téléchargements, c'est bien).</li>
+    <li><b>Double-clique sur <code>Installer Axon.cmd</code></b> dans le dossier extrait. Si Windows affiche « Windows a protégé votre ordinateur » : <i>Informations complémentaires</i> → <i>Exécuter quand même</i>.</li>
+    <li><b>Laisse la fenêtre travailler</b> (2 à 5 minutes la première fois). Elle installe Node.js si besoin, copie l'app dans <code>C:\Users\toi\Axon\app</code>, crée l'icône <b>Axon</b> sur le Bureau, ouvre ce guide et lance Axon.</li>
+  </ol>
+  <div class="note good">Ton cerveau (tes notes) n'est <b>jamais</b> dans le dossier de l'app. Tu peux réinstaller ou mettre à jour l'app sans rien perdre.</div>
+
+  <h2 id="lancer">2. Le premier lancement</h2>
+  <p>Axon te pose 3 questions :</p>
+  <ol class="steps">
+    <li><b>Ton prénom.</b> Il signe ton journal et tes actions (utile quand vous êtes plusieurs sur le même cerveau).</li>
+    <li><b>Où vit ton cerveau.</b>
+      <br><b>Cloud</b> : un dossier dans ton Google Drive (ex. <code>G:\Mon Drive\Axon</code>). Synchronisé partout, partageable avec un ami.
+      <br><b>Personnel</b> : un dossier sur ce PC (ex. <code>Documents\Axon</code>).
+      <br>Le dossier choisi devient la racine : <b>tout se crée dedans</b>. Si tu choisis un dossier qui est déjà un cerveau Axon, tu le <b>rejoins</b>.</li>
+    <li><b>Tes domaines de vie</b> (École, Business, Finance, Trading… ajoute ou retire). Garde la case <b>Brancher automatiquement Claude</b> cochée.</li>
+  </ol>
+  <div class="note">Pour le mode Cloud, il faut <b>Google Drive pour ordinateur</b> (google.com/drive/download) : c'est lui qui fait apparaître <code>G:\Mon Drive</code> dans l'explorateur. Dans ses préférences, choisis <b>Dupliquer les fichiers</b> (« Mirror ») ou rends le dossier Axon <b>disponible hors connexion</b> : les IA lisent alors tout instantanément.</div>
+
+  <h2 id="claude">3. Brancher Claude</h2>
+  <h3>Claude Desktop (l'app Claude sur ton PC)</h3>
+  <ol class="steps">
+    <li>Si la case était cochée au premier lancement, <b>c'est déjà branché</b> (Axon a écrit la configuration de Claude pour toi, avec une copie de sauvegarde). Sinon, dans Axon : <kbd>Ctrl</kbd>+<kbd>K</kbd> → <b>Brancher Claude</b>.</li>
+    <li><b>Quitte Claude complètement</b> — fermer la fenêtre ne suffit pas : en bas à droite, près de l'horloge, clic droit sur l'icône Claude (cherche dans la flèche ^ des icônes cachées) → <b>Quitter</b>.</li>
+    <li><b>Rouvre Claude.</b> Dans une nouvelle conversation, clique sur l'icône des outils (curseurs / « + ») : tu dois voir <b>axon</b> avec ses outils.</li>
+    <li>Écris : <code>Appelle brain_demarrer puis dis-moi ce que tu sais de moi.</code> La première fois, Claude te demande l'autorisation d'utiliser l'outil : accepte (<i>Toujours autoriser</i>).</li>
+  </ol>
+  <h3>Claude Code (dans un terminal ou l'app)</h3>
+  <p>Branché automatiquement s'il est installé. Pour vérifier : <code>claude mcp list</code> doit afficher <code>axon … ✓ Connected</code>. Les 6 skills sont dans <code>~/.claude/skills</code>.</p>
+  <h3>Sur un autre PC ou pour un ami (sans installer l'app)</h3>
+  <p>Dans le dossier de l'app : <code>npm run connector</code> crée <code>Axon.mcpb</code>. Sur l'autre PC, double-clic sur ce fichier → Claude Desktop propose d'installer l'extension → choisis le dossier du cerveau.</p>
+
+  <h2 id="depannage">4. Ça ne marche pas ?</h2>
+  <table>
+    <tr><th>Ce que tu vois</th><th>Quoi faire</th></tr>
+    <tr><td>Pas de « axon » dans les outils de Claude Desktop</td><td>99 % du temps : Claude n'a pas été <b>quitté complètement</b> (voir l'étape 2 ci-dessus). Sinon, rebranche : <kbd>Ctrl</kbd>+<kbd>K</kbd> → Brancher Claude dans Axon, ou dans un terminal : <code>node "%USERPROFILE%\Axon\app\cli\brain.mjs" brancher</code>, puis quitte et rouvre Claude.</td></tr>
+    <tr><td>« axon » apparaît en rouge / « Server disconnected »</td><td>Claude Desktop → Paramètres → <b>Développeur</b> → axon → <i>Ouvrir les journaux</i>. Message « Cerveau introuvable » : le dossier du cerveau a changé de place → ouvre Axon, puis Brancher Claude.</td></tr>
+    <tr><td>Claude répond sans utiliser le cerveau</td><td>Dis-le-lui : « Utilise l'outil axon / brain_contexte avant de répondre ». Dans un Projet Claude, mets-le dans les instructions du projet.</td></tr>
+    <tr><td>L'installation s'arrête sur npm</td><td>Vérifie internet, puis relance <code>Installer Axon.cmd</code> (il reprend là où il était).</td></tr>
+  </table>
+  <p class="muted">Où est la configuration de Claude Desktop ? <code>%APPDATA%\Claude\claude_desktop_config.json</code> (version du site) ou dans <code>%LOCALAPPDATA%\Packages\Claude_…</code> / <code>%LOCALAPPDATA%\Claude-Data\…</code> (version Microsoft Store). Axon écrit dans toutes celles qu'il trouve.</p>
+
+  <h2 id="partage">5. Un cerveau à deux (toi + un ami, avec Google Drive)</h2>
+  <ol class="steps">
+    <li><b>Toi</b> : installe Axon, choisis <b>Cloud</b> et un dossier dans ton Drive, par exemple <code>G:\Mon Drive\Axon Equipe</code>.</li>
+    <li><b>Partage ce dossier</b> sur drive.google.com : clic droit → Partager → l'adresse Gmail de ton ami → <i>Éditeur</i>.</li>
+    <li><b>Ton ami</b> : sur drive.google.com → <i>Partagés avec moi</i> → clic droit sur le dossier → <b>Organiser → Ajouter un raccourci dans « Mon Drive »</b>. Le dossier apparaît alors dans son <code>G:\Mon Drive</code>.</li>
+    <li><b>Ton ami</b> installe Axon et, au premier lancement, choisit <b>ce même dossier</b> : Axon voit que c'est déjà un cerveau et propose de le <b>rejoindre</b>. Son Claude est branché sur le même cerveau.</li>
+  </ol>
+  <p>Les subtilités, déjà gérées par Axon :</p>
+  <div class="cards">
+    <div class="card"><b>Chacun son journal</b><span><code>01-Journal/2026/2026-11-11 Alex.md</code> et <code>… Sam.md</code> : jamais le même fichier.</span></div>
+    <div class="card"><b>Chacun son log</b><span><code>99-Systeme/Log/2026-11 Alex.md</code> : les deux IA écrivent leur carnet de bord sans se marcher dessus.</span></div>
+    <div class="card"><b>Qui a écrit quoi</b><span>Chaque note dit son <code>auteur</code>. Une IA ne réécrit pas les mots d'un humain sans accord.</span></div>
+    <div class="card"><b>Rien ne se perd</b><span>Chaque modification garde l'ancienne version ; « supprimer » = archiver. Google Drive garde aussi 30 jours d'historique.</span></div>
+  </div>
+  <div class="note">La seule règle : <b>ne modifiez pas la même note au même moment</b>. Sinon Google Drive crée une copie « (1) » au lieu de fusionner (rien n'est perdu, il faut juste recoller). Pour une équipe qui écrit beaucoup en même temps, on passe plus tard à Git (fusion ligne par ligne).</div>
+  <p><b>Conseil :</b> garde <b>deux cerveaux</b> — ton cerveau perso (école, finance, trading : privé) et un cerveau d'équipe partagé (le business). Axon peut brancher les deux sur Claude : <code>node cli\brain.mjs brancher "G:\Mon Drive\Axon Equipe" --nom axon-equipe</code>.</p>
+
+  <h2 id="structure">6. La structure du cerveau</h2>
+  <p>Une seule règle : <b>tous les domaines ont le même moule</b>. L'IA sait donc toujours où ranger, et le cerveau peut grandir sans fin.</p>
+<div class="tree">Axon/
+├─ 00-COMMENCER-ICI.md      <i>← l'accueil : qui tu es, tes domaines (la 1re page que lit une IA)</i>
+├─ 00-Inbox/                <i>← tout ce qui arrive en vrac · _archive/ = la « corbeille » récupérable</i>
+├─ 01-Journal/2026/         <i>← une note par jour et par personne</i>
+├─ 05-Noyau/                <i>← Objectifs, mémoire des IA, registres (décisions, leçons, blocages)</i>
+├─ 10-Ecole/                <i>← un DOMAINE :</i>
+│  ├─ Ecole.md              <i>   le hub (objectifs, projets en cours, savoir clé, décisions)</i>
+│  ├─ Projets/Examen BAC/   <i>   un projet = un dossier = un neurone, avec ses fichiers à côté</i>
+│  ├─ Savoir/  Decisions/  Ressources/  Archives/
+├─ 20-Business/  30-Finance/  40-Trading/  …  (même moule, jusqu'à 69)
+├─ 70-Savoir/               <i>← concepts utiles à plusieurs domaines</i>
+├─ 75-Personnes/            <i>← une note par personne</i>
+├─ 80-Sources/              <i>← vidéos, articles, livres, cours (avec le lien)</i>
+├─ 90-Fichiers/             <i>← fichiers importés sans place précise</i>
+├─ 95-Flux/                 <i>← données automatiques (marchés, météo…)</i>
+└─ 99-Systeme/              <i>← index, Log/, Membres, régions du cerveau 3D, modèles</i></div>
+  <h3>Comment les notes se relient</h3>
+  <table>
+    <tr><th>Lien</th><th>Comment</th><th>À quoi ça sert</th></tr>
+    <tr><td>Vers le haut</td><td><code>parent: "[[Business]]"</code> en tête de note</td><td>Chaque note sait où elle habite. On ne se perd jamais.</td></tr>
+    <tr><td>De côté</td><td>Au moins 2 <code>[[liens]]</code> dans le texte</td><td>Les idées se croisent entre domaines (un cours d'économie ↔ ta stratégie de trading). C'est ce qui rend le cerveau intelligent.</td></tr>
+    <tr><td>Les hubs</td><td>Chaque domaine et chaque projet a sa note-carte</td><td>L'IA lit le hub avant d'ouvrir 50 notes : rapide et peu coûteux.</td></tr>
+    <tr><td>Automatique</td><td>Un <code>_index.md</code> par dossier, la recherche par le sens</td><td>L'IA trouve aussi ce qui n'est pas relié à la main.</td></tr>
+  </table>
+  <h3>Le log et l'index, c'est quoi ?</h3>
+  <p><b>Le log</b> (<code>99-Systeme/Log/</code>) est le carnet de bord : une ligne par action — date, qui, ce qui a changé. On n'efface jamais. Une IA qui arrive lit les dernières lignes pour savoir ce qui s'est passé.<br>
+  <b>L'index</b> (<code>99-Systeme/index.md</code>) est le sommaire des notes importantes. Et chaque dossier a un <code>_index.md</code> automatique : une ligne de résumé par note.</p>
+
+  <h2 id="office">7. Excel, Word, PowerPoint dans les neurones</h2>
+  <p>Range tes fichiers <b>dans le neurone qu'ils concernent</b> : <code>30-Finance/Projets/Budget 2027/Budget 2027.xlsx</code> à côté de <code>Budget 2027.md</code>. Ensuite, demande simplement à Claude :</p>
+  <div class="cards">
+    <div class="card"><b>« Lis mon budget 2027 »</b><span>Claude lit le tableau (feuilles, cellules, formules).</span></div>
+    <div class="card"><b>« Mets les courses à 350 et ajoute la ligne Février »</b><span>Modifié sur place, mise en forme et formules gardées.</span></div>
+    <div class="card"><b>« Remplace le prof par M. Martin dans le plan de cours »</b><span>Word et PowerPoint : texte remplacé, gras et styles gardés.</span></div>
+    <div class="card"><b>« Fais-moi un graphique à partir de ce fichier »</b><span>Claude sort une copie, travaille avec ses propres outils, puis la remet dans le neurone.</span></div>
+  </div>
+  <div class="note good">À chaque modification, l'ancienne version est gardée. « Reviens à la version d'avant » suffit.</div>
+
+  <h2 id="autres">8. Les autres IA</h2>
+  <table>
+    <tr><th>IA</th><th>Comment</th></tr>
+    <tr><td>Cursor, Codex, Gemini CLI</td><td>Même serveur MCP : commande <code>node</code>, argument <code>…\Axon\app\mcp\server.mjs</code>, variable <code>BRAIN_VAULT</code> = ton dossier. Elles lisent aussi <code>AGENTS.md</code> / <code>GEMINI.md</code>.</td></tr>
+    <tr><td>ChatGPT, Gemini (site web), claude.ai sur téléphone</td><td>Pas d'accès à ton PC : donne-leur le fichier <code>llms-full.txt</code> à la racine du cerveau (tout l'essentiel en un fichier, mis à jour tout seul).</td></tr>
+  </table>
+
+  <h2 id="desinstaller">9. Désinstaller ou réinstaller</h2>
+  <p>Double-clic sur <code>C:\Users\toi\Axon\Desinstaller Axon.cmd</code> : retire l'app, les raccourcis et le branchement de Claude. <b>Ton cerveau n'est pas touché.</b> Pour réinstaller : <code>Installer Axon.cmd</code> à nouveau, puis choisis ton dossier existant au premier lancement.</p>
+</main>
+</div>
+<script>
+const b = document.getElementById("theme");
+const cur = () => document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+b.onclick = () => { const t = cur() === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = t; try { localStorage.setItem("axon-guide-theme", t); } catch {} };
+try { const t = localStorage.getItem("axon-guide-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+node_modules/
+renderer/dist/
+.models/
+*.log
+connector/server/
+connector/skills/

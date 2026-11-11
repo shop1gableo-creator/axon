@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:">
+<title>Axon · Bienvenue</title>
+<link rel="stylesheet" href="dist/app.css">
+<link rel="stylesheet" href="onboarding.css">
+</head>
+<body>
+<div class="tb"><img src="../build/icon-512.png" alt=""><b>AXON</b><span>Premier lancement</span></div>
+<main>
+  <div class="steps"><i class="on"></i><i></i><i></i><i></i></div>
+
+  <!-- 1. qui -->
+  <section data-step="1" class="on">
+    <h1>Bienvenue dans Axon.</h1>
+    <p class="lead">Ton second cerveau : un dossier de notes reliées que toi et tes IA partagez. On le crée en 3 étapes.</p>
+    <label>Ton prénom <small>(il signe ton journal et tes actions — utile si vous êtes plusieurs)</small></label>
+    <input id="user" placeholder="Alex" autocomplete="off">
+    <div class="actions"><button class="primary" data-next>Continuer</button></div>
+  </section>
+
+  <!-- 2. où -->
+  <section data-step="2">
+    <h1>Où vit ton cerveau ?</h1>
+    <p class="lead">C'est un simple dossier. Choisis où il sera rangé.</p>
+    <div class="cards">
+      <button class="card" data-mode="cloud"><b>Cloud</b><span>Un dossier dans Google Drive (ou OneDrive, Dropbox). Synchronisé sur tous tes appareils, et partageable avec un ami : vous choisissez le même dossier.</span><em id="cloudFound"></em></button>
+      <button class="card" data-mode="local"><b>Personnel</b><span>Un dossier sur ce PC. Privé, hors ligne.</span></button>
+    </div>
+    <div id="where" hidden>
+      <label>Dossier</label>
+      <div class="row"><input id="dir" readonly placeholder="Choisis un dossier…"><button id="pick">Choisir…</button></div>
+      <p id="dirState" class="hint"></p>
+    </div>
+    <div class="actions"><button data-prev>Retour</button><button class="primary" data-next id="toDomains" disabled>Continuer</button></div>
+  </section>
+
+  <!-- 3. domaines -->
+  <section data-step="3">
+    <h1>Les domaines de ta vie</h1>
+    <p class="lead">Chaque domaine aura le même moule : un hub, Projets, Savoir, Décisions, Ressources, Archives. Tu pourras en ajouter à tout moment (« crée un domaine Santé » à ton IA).</p>
+    <div id="doms" class="doms"></div>
+    <div class="row"><input id="newDom" placeholder="Ajouter un domaine (ex. Santé, Sport, Musique…)"><button id="addDom">Ajouter</button></div>
+    <label class="check"><input type="checkbox" id="brancher" checked> Brancher automatiquement Claude (Desktop et Code) sur ce cerveau</label>
+    <div class="actions"><button data-prev>Retour</button><button class="primary" id="create">Créer mon cerveau</button></div>
+  </section>
+
+  <!-- 4. fini -->
+  <section data-step="4">
+    <h1 id="doneTitle">C'est prêt.</h1>
+    <p class="lead" id="doneLead"></p>
+    <ul id="report" class="report"></ul>
+    <div class="box">
+      <b>Dernière étape pour Claude Desktop</b>
+      <p>Quitte Claude <u>complètement</u> : clic droit sur son icône près de l'horloge (en bas à droite) → <b>Quitter</b>. Puis rouvre-le. Dans une conversation, écris : <code>Appelle brain_demarrer</code>.</p>
+    </div>
+    <div class="actions"><button class="primary" id="open">Ouvrir mon cerveau</button></div>
+  </section>
+</main>
+<script src="onboarding.js"></script>
+</body>
+</html>

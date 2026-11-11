@@ -1,0 +1,110 @@
+/* =====================================================================================
+   Axon — widgets de l'accueil (style macOS / iOS) + barre latérale réglable
+   ===================================================================================== */
+.home { max-width: 1320px; margin: 0 auto; }
+.home-head { align-items: flex-end; }
+.home-actions { gap: 10px !important; }
+.h-btn { padding: 9px 15px; border-radius: 999px; border: 0; background: rgba(255,255,255,.08); color: #fff; font: 600 13px var(--ui); transition: background .2s, transform .2s var(--spring); }
+.h-btn:hover { background: rgba(255,255,255,.14); }
+.h-btn:active { transform: scale(.95); }
+.h-btn.primary { background: #fff; color: #000; }
+.h-btn.primary:hover { background: #e7e7ea; }
+
+/* grille : 4 colonnes, tailles S (1), M (2), L (2 × 2), XL (4) */
+.wgrid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; grid-auto-rows: minmax(150px, auto); gap: 16px !important; }
+.w.size-s { grid-column: span 1 !important; grid-row: span 1; }
+.w.size-m { grid-column: span 2 !important; grid-row: span 1; }
+.w.size-l { grid-column: span 2 !important; grid-row: span 2; }
+.w.size-xl { grid-column: span 4 !important; grid-row: span 1; }
+@media (max-width: 1250px) { .wgrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } .w.size-xl { grid-column: span 2 !important; } }
+.home .w { position: relative; padding: 18px 20px 20px; border-radius: 22px !important; background: #111215 !important; overflow: hidden;
+  opacity: 0; transform: translateY(16px) scale(.98); animation: wIn .7s var(--spring) forwards; animation-delay: calc(var(--i, 0) * 45ms);
+  transition: transform .35s var(--spring), box-shadow .35s var(--ease), background .25s; }
+@keyframes wIn { to { opacity: 1; transform: none; } }
+.home:not(.editing) .w:hover { transform: translateY(-3px) !important; box-shadow: 0 24px 50px -24px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.06); }
+.w .w-body { height: 100%; }
+
+/* ---------- horloge ---------- */
+.clock-w { display: flex; align-items: center; gap: 22px; height: 100%; }
+.clock-ring { width: 104px; height: 104px; flex: none; transform: rotate(-90deg); }
+.clock-ring circle { fill: none; stroke: rgba(255,255,255,.08); stroke-width: 3; }
+.clock-ring .sec { stroke: #fff; stroke-linecap: round; stroke-dasharray: 289; stroke-dashoffset: 289; transition: stroke-dashoffset .25s linear; filter: drop-shadow(0 0 6px rgba(255,255,255,.6)); }
+.clock-big { font: 600 64px/1 var(--display); letter-spacing: -.045em; color: #fff; font-variant-numeric: tabular-nums; }
+.clock-date { font: 500 15px var(--ui); color: rgba(255,255,255,.7); margin-top: 6px; }
+.clock-date::first-letter { text-transform: uppercase; }
+.clock-zone { font: 500 12px var(--ui); color: var(--faint); margin-top: 2px; }
+.size-s .clock-ring { display: none; }
+.size-s .clock-big { font-size: 48px; }
+
+/* ---------- météo ---------- */
+.home .w[data-card^="meteo"] { padding: 0 !important; }
+.wx-card { position: relative; height: 100%; padding: 18px 20px 18px; color: #fff; border-radius: 22px; overflow: hidden; }
+.wx-card::before { content: ""; position: absolute; inset: 0; z-index: 0; opacity: .95; transition: opacity .6s; }
+.wx-card.clear::before { background: linear-gradient(165deg, #2f6fd6 0%, #4b90ec 45%, #7fb5f2 100%); }
+.wx-card.grey::before { background: linear-gradient(165deg, #4a5566 0%, #667386 55%, #7d899b 100%); }
+.wx-card.rain::before { background: linear-gradient(165deg, #2c3746 0%, #3f4d61 55%, #55657c 100%); }
+.wx-card.night::before { background: linear-gradient(165deg, #0b1230 0%, #18224a 55%, #26315f 100%); }
+.wx-card > * { position: relative; z-index: 1; }
+.wx-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.wx-city { font: 600 17px var(--ui); letter-spacing: -.01em; }
+.wx-temp { font: 300 64px/1 var(--display); letter-spacing: -.05em; margin: 4px 0 2px; }
+.wx-label { font: 500 13px var(--ui); color: rgba(255,255,255,.85); }
+.wx { width: 26px; height: 26px; }
+.wx.big { width: 64px; height: 64px; animation: wxFloat 5s ease-in-out infinite; filter: drop-shadow(0 6px 14px rgba(0,0,0,.25)); }
+@keyframes wxFloat { 50% { transform: translateY(-5px); } }
+.wx-stats { display: flex; gap: 14px; margin-top: 12px; font: 500 12px var(--ui); color: rgba(255,255,255,.8); }
+.wx-stats b { color: #fff; font-weight: 600; }
+.wx-hours { display: flex; justify-content: space-between; gap: 6px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.18); }
+.wh { display: flex; flex-direction: column; align-items: center; gap: 6px; font: 500 12px var(--ui); opacity: 0; animation: wIn .5s var(--ease) forwards; animation-delay: calc(.2s + var(--i) * 40ms); }
+.wh small { color: rgba(255,255,255,.75); font-size: 11.5px; }
+.wh b { font-weight: 600; font-size: 14px; }
+.wx-week { margin-top: 12px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.18); }
+.wd { display: grid; grid-template-columns: 44px 26px 38px 34px 1fr 34px; align-items: center; gap: 8px; padding: 6px 0; font: 500 13.5px var(--ui); border-bottom: 1px solid rgba(255,255,255,.1); opacity: 0; animation: wIn .5s var(--ease) forwards; animation-delay: calc(.3s + var(--i) * 45ms); }
+.wd:last-child { border-bottom: 0; }
+.wd-day { font-weight: 600; }
+.wd-pp { font-size: 11.5px; color: #bfe3ff; }
+.wd-min { color: rgba(255,255,255,.65); text-align: right; }
+.wd-max { font-weight: 600; }
+.wd-bar { position: relative; height: 5px; border-radius: 5px; background: rgba(0,0,0,.22); overflow: hidden; }
+.wd-bar i { position: absolute; top: 0; bottom: 0; border-radius: 5px; background: linear-gradient(90deg, #8fd3ff, #ffd66b, #ff9d5c); transform-origin: left; animation: barIn .8s var(--ease) both; animation-delay: .4s; }
+@keyframes barIn { from { transform: scaleX(0); } }
+
+/* ---------- mode Personnaliser ---------- */
+.home.editing .w { cursor: grab; animation: wIn .5s var(--spring) forwards, jiggle .32s ease-in-out infinite alternate; animation-delay: calc(var(--i) * 30ms), calc(var(--i) * 37ms); box-shadow: 0 0 0 1.5px rgba(255,255,255,.18) !important; }
+@keyframes jiggle { from { rotate: -.35deg; } to { rotate: .35deg; } }
+.home.editing .w.dragging { opacity: .35 !important; }
+.home.editing .w.drop-before { box-shadow: -4px 0 0 0 #fff, 0 0 0 1.5px rgba(255,255,255,.5) !important; }
+.w-tools { position: absolute; top: 10px; right: 10px; z-index: 5; display: flex; gap: 3px; padding: 3px; border-radius: 10px; background: rgba(0,0,0,.6); backdrop-filter: blur(12px); }
+.w-tools button { border: 0; padding: 5px 8px; border-radius: 7px; background: transparent; color: rgba(255,255,255,.7); font: 600 11px var(--ui); }
+.w-tools button:hover { background: rgba(255,255,255,.12); color: #fff; }
+.w-tools button.on { background: #fff; color: #000; }
+.w-tools .w-hide { color: #ff8a8a; }
+.w-tray { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 16px; padding: 12px 14px; border-radius: 16px; background: #111215; animation: wIn .4s var(--spring) forwards; opacity: 0; }
+.w-tray span { font: 500 13px var(--ui); color: var(--muted); margin-right: 4px; }
+.w-tray button { border: 0; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.08); color: #fff; font: 600 12.5px var(--ui); }
+.w-tray button:hover { background: rgba(255,255,255,.16); }
+.w-tray button.ghost { margin-left: auto; background: transparent; color: var(--muted); }
+
+/* ---------- bandeau ---------- */
+.home .ticker { margin-bottom: 18px !important; padding: 12px 0 !important; }
+
+/* =====================================================================================
+   Barre latérale : largeur réglable + arborescence lisible
+   ===================================================================================== */
+#sideResize { position: fixed; top: var(--tb); bottom: 0; left: calc(var(--side-w) - 3px); width: 6px; z-index: 30; cursor: col-resize; }
+#sideResize::after { content: ""; position: absolute; top: 0; bottom: 0; left: 2px; width: 2px; background: transparent; transition: background .2s; }
+#sideResize:hover::after, body.resizing #sideResize::after { background: rgba(255,255,255,.35); }
+body.resizing, body.resizing * { cursor: col-resize !important; user-select: none !important; }
+#tree { overflow-x: hidden !important; font-size: 13px; }
+#tree .kids { margin-left: 9px !important; padding-left: 7px !important; border-left: 1px solid rgba(255,255,255,.06) !important; background: none !important; }
+#tree .dname, #tree .file { display: flex !important; align-items: center; gap: 6px; padding: 4px 8px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; background: none; border: 0 !important; border-radius: 7px !important; }
+#tree .dname > *, #tree .file > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#tree .dname { font-weight: 500; color: rgba(255,255,255,.78); }
+#tree .file { color: rgba(255,255,255,.55) !important; font-weight: 400; }
+#tree .file.on { background: rgba(255,255,255,.1) !important; color: #fff !important; }
+#tree [class*="dir"]::before { opacity: .5; }
+.wx-card, .wx-card * { font-family: var(--ui) !important; letter-spacing: -.005em; }
+.wx-card span, .wx-card small { color: rgba(255,255,255,.82) !important; }
+.wx-card .wd-pp { color: #cfeaff !important; }
+.wx-card .wd-min { color: rgba(255,255,255,.62) !important; }
+.wx-card .wd-day, .wx-card .wd-max { color: #fff !important; }

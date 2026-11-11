@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' brain: data: blob:; media-src brain: blob:; frame-src brain:; worker-src 'self' blob:; connect-src 'self' brain:">
+<title>Axon</title>
+<link rel="stylesheet" href="dist/app.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="home.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="ui.css">
+<link rel="stylesheet" href="pro.css">
+<link rel="stylesheet" href="widgets.css">
+</head>
+<body>
+<header id="titlebar"><img src="../build/icon-512.png" alt=""><span class="tb-nav"><button id="tbBack" title="Retour (Alt+←)" disabled>‹</button><button id="tbFwd" title="Avant (Alt+→)" disabled>›</button></span><span class="tb-name">AXON</span><span class="tb-sep">/</span><span id="tbPage">Accueil</span><span class="tb-fill"></span><span id="tbStats"></span></header>
+<div id="app">
+  <aside id="side">
+    <div class="brand" hidden><span id="stats"></span></div>
+    <button class="searchbtn" id="bPalette"><span>Rechercher, ouvrir, agir…</span><kbd>Ctrl K</kbd></button>
+    <nav id="nav">
+      <a data-view="home" class="on"><i>⌂</i>Accueil<kbd>H</kbd></a>
+      <a data-view="brain"><i>◉</i>Cerveau<kbd>B</kbd></a>
+      <a data-view="model"><i>✺</i>Modèle<kbd>J</kbd></a>
+      <a data-view="apis"><i>⌁</i>API publiques</a>
+      <a data-view="timeline"><i>≋</i>Chronologie<kbd>T</kbd></a>
+      <a data-view="waves"><i>∿</i>Vagues</a>
+      <a data-view="numbers"><i>▤</i>Chiffres<kbd>G</kbd></a>
+      <a data-view="medias"><i>▣</i>Médias<kbd>M</kbd></a>
+      <a data-view="health"><i>✚</i>Santé<kbd>H</kbd></a>
+      <a data-view="ask"><i>✦</i>Demander<kbd>D</kbd></a>
+    </nav>
+    <div class="actions">
+      <button id="bNew" title="Nouvelle note (Ctrl+N)">＋ Note</button>
+      <button id="bImport" title="Importer des fichiers (Ctrl+I)">⇪ Importer</button>
+      <button id="bSync" title="Enregistrer et synchroniser (Ctrl+Maj+S)">⟳ Synchro</button>
+    </div>
+    <div class="sect">Fichiers</div>
+    <nav id="tree"></nav>
+    <div id="gauges"></div>
+    <footer id="status">Chargement…</footer>
+  </aside>
+
+  <div id="sideResize" title="Glisser pour régler la largeur · double-clic : par défaut"></div>
+  <main id="main">
+    <!-- Vue cerveau -->
+    <section id="brainView" class="view">
+      <div id="graph"></div>
+      <div class="hud tl glass">
+        <div class="hud-title">Cerveau</div>
+        <div class="hud-sub" id="brainSub"></div>
+        <div class="bfind"><input id="brainFind" placeholder="Aller à un neurone…" autocomplete="off" spellcheck="false"><div id="brainFindList" hidden></div></div>
+      </div>
+      <div class="hud tc shape-seg" id="shapeSeg"><i class="seg-ind"></i><button data-shape="brain">Cerveau</button><button data-shape="spine">Cerveau + colonne</button><button data-shape="galaxy">Galaxie</button></div>
+      <div class="hud tr">
+        <button class="glass" id="bAtelier" title="Créer un neurone">✦ Créer</button><button class="glass icon" id="bZoomIn" title="Zoomer">+</button><button class="glass icon" id="bZoomOut" title="Dézoomer">−</button><button class="glass icon" id="bHome" title="Recentrer sur tout le cerveau">⌂</button>
+        <button class="glass icon" id="bViewPanel" title="Réglages de la vue">⚙</button>
+      </div>
+      <aside class="glass" id="viewPanel" hidden>
+        <header><span>VUE</span><button class="ghost icon" id="vpClose">✕</button></header>
+        <h5>Apparence</h5>
+        <label class="row">Thème<select data-k="theme"><option value="original">Original</option><option value="midnight">Midnight</option><option value="graphite">Graphite</option><option value="pine">Pine</option><option value="plum">Plum</option><option value="ember">Ember</option></select></label>
+        <div class="row-label">Couleurs des données</div>
+        <div id="palettes" class="palettes"></div>
+        <h5>Forme</h5>
+        <label class="row">Cerveau<input type="range" data-k="morph" min="0" max="100"><span>Disposition</span></label>
+        <label class="row tog">Neurones vides<input type="checkbox" data-k="empties"></label>
+        <label class="row tog">Suivre les créations<input type="checkbox" data-k="follow"></label>
+        <div class="row-label">Disposition</div>
+        <div class="seg layouts" id="layouts">
+          <button data-l="grid">Grille</button><button data-l="ribbon">Ruban</button><button data-l="wheel">Roue</button><button data-l="spheres">Sphères</button>
+          <button data-l="shells">Coquilles</button><button data-l="clusters">Amas</button><button data-l="folders">Dossiers</button><button data-l="astrolabe">Astrolabe</button>
+        </div>
+        <label class="row">Ordre du brut<select data-k="order"><option value="oldest">Plus ancien d'abord</option><option value="newest">Plus récent d'abord</option></select></label>
+        <label class="row tog">Notes (savoir)<input type="checkbox" data-k="showNotes"></label>
+        <label class="row tog">Brut (journal, sources, médias)<input type="checkbox" data-k="showRecord"></label>
+        <h5>Groupes</h5>
+        <label class="row">Grouper par<select data-k="groupBy"><option value="region">Région</option><option value="folder">Dossier</option><option value="tag">Premier tag</option><option value="type">Type</option></select></label>
+        <label class="row">Étiquettes<select data-k="labels"><option value="lit">Automatique (selon le zoom)</option><option value="hubs">Hubs</option><option value="all">Toutes</option><option value="none">Aucune</option></select></label>
+        <h5>Mouvement</h5>
+        <label class="row tog">Rotation<input type="checkbox" data-k="turning"></label>
+        <label class="row">Vitesse<input type="range" data-k="speed" min="0" max="250"><output data-o="speed"></output></label>
+        <h5>Dessin</h5>
+        <label class="row tog">Liens<input type="checkbox" data-k="links"></label>
+        <label class="row tog">Synapses du sens<input type="checkbox" data-k="sens"></label>
+        <label class="row">Contour du cerveau<input type="range" data-k="scaffold" min="0" max="150"><output data-o="scaffold"></output></label>
+        <label class="row">Taille des nœuds<input type="range" data-k="pointSize" min="40" max="250"><output data-o="pointSize"></output></label>
+        <label class="row">Lueur<input type="range" data-k="bloom" min="0" max="150"><output data-o="bloom"></output></label>
+<button class="ghost wide" id="vpReset">Réinitialiser</button>
+      </aside>
+      <aside class="glass" id="atelier" hidden>
+        <header><span>ATELIER · NOUVEAU NEURONE</span><button class="ghost icon" id="atClose" title="Fermer">✕</button></header>
+        <label class="at-l">Nom du neurone<input id="atTitle" placeholder="Ex. Idée pub coffret Porsche" autocomplete="off"></label>
+        <label class="at-l">Région du cerveau<select id="atRegion"></select></label>
+        <label class="at-l">Texte<textarea id="atText" rows="5" placeholder="Ce que contient ce neurone (idée, décision, notes…)"></textarea></label>
+        <div class="at-l">Médias <button class="ghost small" id="atFiles" type="button">+ images, vidéos, PDF…</button><div id="atMedia" class="at-chips"></div></div>
+        <div class="at-l">Relier à<div class="bfind"><input id="atLink" placeholder="Chercher un neurone à relier…" autocomplete="off"><div id="atLinkList" hidden></div></div><div id="atLinks" class="at-chips"></div></div>
+        <button class="primary wide" id="atCreate">Faire naître le neurone</button>
+        <p class="at-hint">Ou demande à Claude : « crée un neurone sur… relié à… ». Tu le verras naître ici en direct.</p>
+      </aside>
+      <div class="hud card glass" id="card" hidden></div>
+      <div id="legend"></div>
+    </section>
+
+    <!-- Vue note -->
+    <section id="noteView" class="view" hidden>
+      <header class="noteHead">
+        <div class="titles"><div id="crumb"></div><h1 id="title"></h1></div>
+        <div class="seg" id="viewMode"><button data-v="read" class="on">Lire</button><button data-v="edit">Écrire</button></div>
+        <button id="bFocus" class="ghost" title="Voir dans le cerveau">◉</button>
+        <button id="bReveal" class="ghost" title="Montrer dans l'explorateur">Dossier</button>
+      </header>
+      <div id="noteBody">
+        <article id="preview" class="md"></article>
+        <div id="editor" hidden></div>
+      </div>
+    </section>
+
+    <!-- Vues générées (chronologie, chiffres, médias, santé, demander) -->
+    <section id="pageView" class="view" hidden><div id="page"></div></section>
+  </main>
+
+  <aside id="panel">
+    <h3>Propriétés</h3><div id="props"></div>
+    <h3>Plan</h3><div id="outline"></div>
+    <h3>Rétroliens</h3><div id="back"></div>
+    <h3>Liens sortants</h3><div id="out"></div>
+    <h3>Proches par le sens</h3><div id="near"></div>
+  </aside>
+</div>
+
+<dialog id="palette" class="glass">
+  <input id="pq" placeholder="Tape un nom de note, une question, ou « > » pour les actions" autocomplete="off" spellcheck="false">
+  <div class="seg small" id="pmode"><button data-m="neural" class="on">Neuronal</button><button data-m="text">Mots</button><button data-m="sens">Sens</button></div>
+  <ul id="plist" role="listbox"></ul>
+  <footer><span><kbd>↑↓</kbd> naviguer</span><span><kbd>Entrée</kbd> ouvrir</span><span><kbd>Tab</kbd> mode</span><span><kbd>Échap</kbd> fermer</span></footer>
+</dialog>
+
+<div id="drop" hidden><div>Lâche ici pour ranger dans le Brain<small>images, vidéos, sons, PDF, textes, n'importe quel fichier</small></div></div>
+<div id="toasts"></div>
+<div id="hover" hidden></div>
+
+<dialog id="dlgNew" class="glass">
+  <form method="dialog" id="fNew">
+    <h2>Nouvelle note</h2>
+    <label>Titre<input id="nTitle" required></label>
+    <label>Où la ranger<select id="nFolder"></select></label>
+    <label>Type<select id="nType"><option value="note">Note</option><option value="concept">Concept (wiki)</option><option value="projet">Projet</option><option value="decision">Décision</option><option value="journal">Journal</option><option value="source">Source</option><option value="produit">Produit</option></select></label>
+    <label>Tags (séparés par des virgules)<input id="nTags"></label>
+    <menu><button value="cancel" type="button" id="nCancel" class="ghost">Annuler</button><button value="ok" class="primary">Créer</button></menu>
+  </form>
+</dialog>
+
+<!-- Verre liquide : distorsion utilisée dans backdrop-filter (voir home.css) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="lg-refract" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="2" seed="11" result="noise"/>
+    <feGaussianBlur in="noise" stdDeviation="3" result="soft"/>
+    <feDisplacementMap in="SourceGraphic" in2="soft" scale="34" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+<script src="dist/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+{
+  "manifest_version": "0.2",
+  "name": "axon",
+  "display_name": "Axon",
+  "version": "1.0.0",
+  "description": "Axon : un second cerveau pour Claude. Mémoire persistante, recherche par le sens, fichiers Office modifiables.",
+  "long_description": "Axon donne à Claude une mémoire persistante dans un dossier de notes Markdown (sur ton PC ou dans Google Drive), organisé en domaines de vie. Claude cherche par le sens, lit, crée, relie, modifie les notes et les fichiers Excel, Word et PowerPoint sur place (anciennes versions gardées, rien n est supprimé), et suit 7 skills intégrés.",
+  "author": {
+    "name": "Axon"
+  },
+  "icon": "icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.mjs",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/server/index.mjs"
+      ],
+      "env": {
+        "BRAIN_VAULT": "${user_config.vault}"
+      }
+    }
+  },
+  "user_config": {
+    "vault": {
+      "type": "directory",
+      "title": "Dossier du cerveau Axon",
+      "description": "Le dossier de ton cerveau Axon (sur ce PC ou dans Google Drive).",
+      "required": true
+    }
+  },
+  "tools": [
+    {
+      "name": "brain_demarrer",
+      "description": "Point d entrée : qui sont l humain, la carte, le protocole"
+    },
+    {
+      "name": "brain_skill",
+      "description": "Les modes d emploi (skills) pour bien travailler avec le cerveau"
+    },
+    {
+      "name": "brain_contexte",
+      "description": "Paquet de contexte pour répondre à une question"
+    },
+    {
+      "name": "brain_chercher",
+      "description": "Recherche dans tout le cerveau"
+    },
+    {
+      "name": "brain_lire",
+      "description": "Lire une note"
+    },
+    {
+      "name": "brain_liens",
+      "description": "Liens et voisins d une note"
+    },
+    {
+      "name": "brain_ecrire",
+      "description": "Créer ou compléter une note"
+    },
+    {
+      "name": "brain_ajouter",
+      "description": "Ajouter du texte à une note"
+    },
+    {
+      "name": "brain_creer_neurone",
+      "description": "Créer un neurone relié, avec médias"
+    },
+    {
+      "name": "brain_importer",
+      "description": "Importer un fichier (transcription, OCR, documents)"
+    },
+    {
+      "name": "brain_apprendre",
+      "description": "Mémoriser un fait durable"
+    },
+    {
+      "name": "brain_cloture",
+      "description": "Rituel de fin de session"
+    },
+    {
+      "name": "brain_banque",
+      "description": "Trouver une image ou un clip dans les banques"
+    },
+    {
+      "name": "brain_journal",
+      "description": "Journaliser une action"
+    },
+    {
+      "name": "brain_recent",
+      "description": "Notes récentes"
+    },
+    {
+      "name": "brain_carte",
+      "description": "Carte du cerveau"
+    },
+    {
+      "name": "brain_maj",
+      "description": "Mettre à jour les flux"
+    },
+    {
+      "name": "brain_sante",
+      "description": "Santé du cerveau"
+    },
+    {
+      "name": "brain_fichier",
+      "description": "N importe quel fichier du cerveau en qualité d origine"
+    },
+    {
+      "name": "brain_parcourir",
+      "description": "Carte des liens autour d un neurone"
+    },
+    {
+      "name": "brain_dossier",
+      "description": "Lister un dossier du cerveau"
+    },
+    {
+      "name": "brain_modifier",
+      "description": "Modifier un fichier (rechercher-remplacer, ancienne version gardée)"
+    },
+    {
+      "name": "brain_creer_fichier",
+      "description": "Créer n importe quel fichier texte (code, csv, json…)"
+    },
+    {
+      "name": "brain_deplacer",
+      "description": "Renommer ou déplacer (liens mis à jour)"
+    },
+    {
+      "name": "brain_archiver",
+      "description": "Archiver au lieu de supprimer (récupérable)"
+    },
+    {
+      "name": "brain_versions",
+      "description": "Lister ou restaurer les anciennes versions"
+    },
+    {
+      "name": "brain_office",
+      "description": "Lire et modifier sur place un Excel, Word ou PowerPoint"
+    },
+    {
+      "name": "brain_sortir",
+      "description": "Sortir une copie de travail d un fichier"
+    },
+    {
+      "name": "brain_remettre",
+      "description": "Remettre un fichier dans son neurone (version gardée)"
+    },
+    {
+      "name": "brain_creer_domaine",
+      "description": "Ajouter un domaine de vie complet"
+    }
+  ],
+  "compatibility": {
+    "platforms": [
+      "win32",
+      "darwin",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=20.0.0"
+    }
+  },
+  "keywords": [
+    "memoire",
+    "second cerveau",
+    "obsidian",
+    "vant"
+  ],
+  "license": "UNLICENSED",
+  "prompts": [
+    {
+      "name": "demarrer",
+      "description": "Préparer l IA avec le cerveau",
+      "text": "Appelle brain_demarrer puis brain_skill."
+    }
+  ]
+}
