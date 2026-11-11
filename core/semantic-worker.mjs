@@ -17,9 +17,10 @@ port.on("message", async (e) => {
       result = await sem.indexAll(progress);
     } else if (m.type === "generate") {
       // Petit modèle de secours, 100 % local (Qwen3 0.6B, quantifié 4 bits, ~1 Go de RAM).
-      const { pipeline, env } = await import("@huggingface/transformers");
+      const { env } = await import("@huggingface/transformers");
       env.cacheDir = m.cacheDir;
-      generator ??= await pipeline("text-generation", "onnx-community/Qwen3-0.6B-ONNX", { dtype: "q4f16" });
+      const { loadPipeline } = await import("./acceleration.mjs");
+      generator ??= await loadPipeline("text-generation", "onnx-community/Qwen3-0.6B-ONNX", { dtype: "q4f16" });
       const out = await generator(m.messages, { max_new_tokens: m.max || 400, do_sample: false });
       result = String(out[0].generated_text.at(-1).content).replace(/<think>[\s\S]*?<\/think>/g, "").trim();
     } else if (m.type === "transcribe") {
@@ -28,6 +29,9 @@ port.on("message", async (e) => {
     } else if (m.type === "ocr") {
       const { ocr } = await import("./enrich.mjs");
       result = await ocr(m.file, m.cacheDir);
+    } else if (m.type === "materiel") {
+      const { status, deviceLabel } = await import("./acceleration.mjs");
+      result = { ...status, label: deviceLabel() };
     } else if (m.type === "embed") {
       if (!sem) sem = new Semantic(new Vault(m.root), m.cacheDir);
       result = await sem.embed(m.text, m.kind);

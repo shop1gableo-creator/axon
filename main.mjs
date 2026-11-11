@@ -25,6 +25,30 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 protocol.registerSchemesAsPrivileged([{ scheme: "brain", privileges: { standard: true, secure: true, stream: true, supportFetchAPI: true } }]);
 if (process.env.AXON_DATA) app.setPath("userData", process.env.AXON_DATA); // tests : réglages à part
 
+// ----- Désinstallation : « Axon.exe --debrancher » retire Axon de Claude puis quitte (appelé par le désinstallateur).
+if (process.argv.includes("--debrancher")) {
+  const { debrancherClaude } = await import("./core/claude-connect.mjs");
+  try { debrancherClaude({ nom: "axon" }); } catch { /* rien à débrancher */ }
+  app.exit(0);
+}
+// Une seule fenêtre Axon à la fois : relancer l'app ramène la fenêtre existante au premier plan.
+if (!process.env.BRAIN_SNAPSHOT && !app.requestSingleInstanceLock()) app.exit(0);
+app.on("second-instance", () => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
+
+// ----- Carte graphique : sur un PC portable à deux puces (Intel + NVIDIA/AMD), Windows lance souvent les apps sur la
+// puce Intel (économie d'énergie) → le cerveau 3D rame. On demande la puce PERFORMANTE et l'accélération maximale.
+if (!process.argv.includes("--sans-gpu")) {
+  app.commandLine.appendSwitch("force_high_performance_gpu");
+  app.commandLine.appendSwitch("ignore-gpu-blocklist");
+  app.commandLine.appendSwitch("enable-gpu-rasterization");
+  app.commandLine.appendSwitch("enable-zero-copy");
+} else app.disableHardwareAcceleration();
+// Préférence graphique Windows pour Axon (= Paramètres > Affichage > Graphisme > « Hautes performances »).
+function preferHighPerfGpu() {
+  if (process.platform !== "win32" || !app.isPackaged) return;
+  execFile("reg", ["add", "HKCU\\Software\\Microsoft\\DirectX\\UserGpuPreferences", "/v", process.execPath, "/t", "REG_SZ", "/d", "GpuPreference=2;", "/f"], { windowsHide: true }, () => {});
+}
+
 let win, vault, semantic, watcher, fluxTimer;
 const settingsFile = () => path.join(app.getPath("userData"), "settings.json");
 
@@ -78,6 +102,7 @@ function onboardingHandlers() {
     const rapport = brancher ? brancherClaude({ vault: dir, utilisateur }) : [];
     return { dir, rejoint, rapport };
   });
+  h("axon:guide", () => shell.openPath(path.join(here, "guide", "index.html")));
   h("setup:done", async () => { const dir = await pickVaultPath(); if (dir) { await openVault(dir); await win.loadFile(path.join(here, "renderer", "index.html")); } });
 }
 
@@ -203,6 +228,13 @@ function handlers() {
   h("vault:info", () => (vault ? { ...vault.stats(), sem: !!semantic?.ready } : null));
   h("vault:choose", async () => { await win.loadFile(path.join(here, "renderer", "onboarding.html")); return null; });
   h("axon:whoami", async () => ({ utilisateur: vault?.user || "", dossier: vault?.root || "" }));
+  h("axon:materiel", async () => {
+    const g = await app.getGPUInfo("complete").catch(() => ({}));
+    const actif = (g.gpuDevice || []).find((d) => d.active) || (g.gpuDevice || [])[0] || {};
+    const ia = await semantic?.call?.("materiel").catch(() => null);
+    const gl = g.auxAttributes?.glRenderer || "";
+    return { carte: gl.match(/ANGLE \([^,]+, (.+?) \(0x/)?.[1] || actif.deviceString || gl || "inconnue", acceleration: app.getGPUFeatureStatus?.().webgl, ia: ia?.label || "pas encore chargée", coeurs: os.cpus().length, ram: Math.round(os.totalmem() / 1e9) };
+  });
   h("journal:today", async () => {
     const rel = journalDuJour(vault.user);
     if (!vault.notes.has(rel)) {
@@ -316,8 +348,9 @@ app.whenReady().then(async () => {
   });
   handlers();
   onboardingHandlers();
+  preferHighPerfGpu();
   win = new BrowserWindow({
-    width: 1500, height: 920, minWidth: 900, minHeight: 600, backgroundColor: "#060708", title: "Axon", icon: path.join(here, "build", "icon.png"),
+    width: 1500, height: 920, minWidth: 900, minHeight: 600, backgroundColor: "#060708", title: "Axon", icon: path.join(here, "renderer", "icon.png"),
     titleBarStyle: "hidden", titleBarOverlay: { color: "#060708", symbolColor: "#cfd2d8", height: 40 },
     autoHideMenuBar: true,
     webPreferences: { preload: path.join(here, "preload.cjs"), contextIsolation: true, nodeIntegration: false, sandbox: true },

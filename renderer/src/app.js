@@ -431,6 +431,8 @@ const ACTIONS = [
   { t: "Note du jour", run: () => dailyNote() },
   { t: "Brancher Claude (Desktop + Code) sur ce cerveau", run: async () => { const r = await B.brancherClaude(); toast(r.map((x) => (x.ok ? "✓ " : "– ") + x.cible).join(" · ") + " — quitte Claude complètement puis rouvre-le"); } },
   { t: "Changer de cerveau / rejoindre un cerveau", run: () => B.chooseVault() },
+  { t: "Guide Axon (installation, Claude, dépannage)", run: () => B.guide() },
+  { t: "Matériel utilisé (carte graphique, processeur)", run: async () => { const m = await B.materiel(); toast(`Affichage : ${m.carte} (WebGL ${m.acceleration}) · IA locale : ${m.ia} · ${m.coeurs} cœurs · ${m.ram} Go de RAM`, 9000); } },
   { t: "Recalculer le sens des notes", run: () => { B.reindex(); toast("Recalcul lancé"); } },
   ...Object.keys(PALETTES).map((p) => ({ t: `Palette : ${p}`, run: () => { renderLegend(brain.apply({ palette: p })); store.set("view6", brain.settings()); } })),
 ];

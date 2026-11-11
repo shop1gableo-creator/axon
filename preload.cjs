@@ -5,8 +5,8 @@ const call = (ch) => (...a) => ipcRenderer.invoke(ch, ...a);
 const on = (ch) => (fn) => { const l = (_e, d) => fn(d); ipcRenderer.on(ch, l); return () => ipcRenderer.removeListener(ch, l); };
 
 contextBridge.exposeInMainWorld("brain", {
-  info: call("vault:info"), chooseVault: call("vault:choose"), dailyNote: call("journal:today"), whoami: call("axon:whoami"), brancherClaude: call("claude:brancher"),
-  setup: { info: call("setup:info"), pick: call("setup:pick"), check: call("setup:check"), create: call("setup:create"), done: call("setup:done") }, tree: call("vault:tree"), graph: call("vault:graph"),
+  info: call("vault:info"), chooseVault: call("vault:choose"), dailyNote: call("journal:today"), whoami: call("axon:whoami"), materiel: call("axon:materiel"), brancherClaude: call("claude:brancher"),
+  setup: { info: call("setup:info"), pick: call("setup:pick"), check: call("setup:check"), create: call("setup:create"), done: call("setup:done") }, guide: call("axon:guide"), tree: call("vault:tree"), graph: call("vault:graph"),
   getNote: call("note:get"), saveNote: call("note:save"), createNote: call("note:create"), resolve: call("note:resolve"),
   fileInfo: call("file:info"), importFiles: call("files:import"), pickFiles: call("files:pick"),
   searchText: call("search:text"), searchSens: call("search:sens"), searchNeural: call("search:neural"),

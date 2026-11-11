@@ -63,11 +63,12 @@ button.theme { position: fixed; top: 14px; right: 16px; border: 1px solid var(--
 
   <h2 id="installer">1. Installer Axon</h2>
   <ol class="steps">
-    <li><b>Télécharge Axon.</b> Sur la page GitHub du projet : bouton vert <b>Code</b> → <b>Download ZIP</b>.</li>
-    <li><b>Décompresse le ZIP</b> (clic droit → <i>Extraire tout…</i>), n'importe où (Téléchargements, c'est bien).</li>
-    <li><b>Double-clique sur <code>Installer Axon.cmd</code></b> dans le dossier extrait. Si Windows affiche « Windows a protégé votre ordinateur » : <i>Informations complémentaires</i> → <i>Exécuter quand même</i>.</li>
-    <li><b>Laisse la fenêtre travailler</b> (2 à 5 minutes la première fois). Elle installe Node.js si besoin, copie l'app dans <code>C:\Users\toi\Axon\app</code>, crée l'icône <b>Axon</b> sur le Bureau, ouvre ce guide et lance Axon.</li>
+    <li><b>Télécharge l'installateur.</b> Sur la page GitHub du projet, colonne de droite : <b>Releases</b> → la dernière version → <b><code>Axon-Setup-1.0.0.exe</code></b>.</li>
+    <li><b>Double-clique sur <code>Axon-Setup-1.0.0.exe</code>.</b> Si Windows affiche « Windows a protégé votre ordinateur » (l'app n'est pas encore signée par un certificat payant) : <i>Informations complémentaires</i> → <i>Exécuter quand même</i>.</li>
+    <li><b>Suis l'assistant</b> : choisis le dossier d'installation (ou laisse celui proposé) → <b>Installer</b> → <b>Terminer</b>. Rien à taper, pas de terminal, pas besoin d'installer Node.js : tout est dans l'installateur.</li>
+    <li><b>Axon s'ouvre tout seul</b> à la fin. L'icône <b>Axon</b> est sur le Bureau et dans le menu Démarrer. Compatible Windows 10 et 11 (64 bits).</li>
   </ol>
+  <div class="note">Axon utilise automatiquement la <b>carte graphique la plus puissante</b> du PC pour l'affichage du cerveau 3D (sur un portable avec deux puces, la NVIDIA ou AMD plutôt que l'Intel). Pour vérifier : <kbd>Ctrl</kbd>+<kbd>K</kbd> → <b>Matériel utilisé</b>. L'IA locale (recherche par le sens) tourne sur le processeur, par paquets : mesuré plus rapide que la carte graphique pour ce petit modèle.</div>
   <div class="note good">Ton cerveau (tes notes) n'est <b>jamais</b> dans le dossier de l'app. Tu peux réinstaller ou mettre à jour l'app sans rien perdre.</div>
 
   <h2 id="lancer">2. Le premier lancement</h2>
@@ -91,14 +92,14 @@ button.theme { position: fixed; top: 14px; right: 16px; border: 1px solid var(--
     <li>Écris : <code>Appelle brain_demarrer puis dis-moi ce que tu sais de moi.</code> La première fois, Claude te demande l'autorisation d'utiliser l'outil : accepte (<i>Toujours autoriser</i>).</li>
   </ol>
   <h3>Claude Code (dans un terminal ou l'app)</h3>
-  <p>Branché automatiquement s'il est installé. Pour vérifier : <code>claude mcp list</code> doit afficher <code>axon … ✓ Connected</code>. Les 6 skills sont dans <code>~/.claude/skills</code>.</p>
-  <h3>Sur un autre PC ou pour un ami (sans installer l'app)</h3>
-  <p>Dans le dossier de l'app : <code>npm run connector</code> crée <code>Axon.mcpb</code>. Sur l'autre PC, double-clic sur ce fichier → Claude Desktop propose d'installer l'extension → choisis le dossier du cerveau.</p>
+  <p>Branché automatiquement s'il est installé. Pour vérifier : <code>claude mcp list</code> doit afficher <code>axon … ✓ Connected</code>. Les 7 skills sont dans <code>~/.claude/skills</code>.</p>
+  <h3>Sur un autre PC ou pour un ami</h3>
+  <p>Il installe Axon avec le même <code>Axon-Setup.exe</code> et choisit le dossier du cerveau au premier lancement : Claude est branché automatiquement chez lui aussi.</p>
 
   <h2 id="depannage">4. Ça ne marche pas ?</h2>
   <table>
     <tr><th>Ce que tu vois</th><th>Quoi faire</th></tr>
-    <tr><td>Pas de « axon » dans les outils de Claude Desktop</td><td>99 % du temps : Claude n'a pas été <b>quitté complètement</b> (voir l'étape 2 ci-dessus). Sinon, rebranche : <kbd>Ctrl</kbd>+<kbd>K</kbd> → Brancher Claude dans Axon, ou dans un terminal : <code>node "%USERPROFILE%\Axon\app\cli\brain.mjs" brancher</code>, puis quitte et rouvre Claude.</td></tr>
+    <tr><td>Pas de « axon » dans les outils de Claude Desktop</td><td>99 % du temps : Claude n'a pas été <b>quitté complètement</b> (voir l'étape 2 ci-dessus). Sinon, rebranche : <kbd>Ctrl</kbd>+<kbd>K</kbd> → <b>Brancher Claude</b> dans Axon, puis quitte et rouvre Claude.</td></tr>
     <tr><td>« axon » apparaît en rouge / « Server disconnected »</td><td>Claude Desktop → Paramètres → <b>Développeur</b> → axon → <i>Ouvrir les journaux</i>. Message « Cerveau introuvable » : le dossier du cerveau a changé de place → ouvre Axon, puis Brancher Claude.</td></tr>
     <tr><td>Claude répond sans utiliser le cerveau</td><td>Dis-le-lui : « Utilise l'outil axon / brain_contexte avant de répondre ». Dans un Projet Claude, mets-le dans les instructions du projet.</td></tr>
     <tr><td>L'installation s'arrête sur npm</td><td>Vérifie internet, puis relance <code>Installer Axon.cmd</code> (il reprend là où il était).</td></tr>
@@ -170,7 +171,7 @@ button.theme { position: fixed; top: 14px; right: 16px; border: 1px solid var(--
   </table>
 
   <h2 id="desinstaller">9. Désinstaller ou réinstaller</h2>
-  <p>Double-clic sur <code>C:\Users\toi\Axon\Desinstaller Axon.cmd</code> : retire l'app, les raccourcis et le branchement de Claude. <b>Ton cerveau n'est pas touché.</b> Pour réinstaller : <code>Installer Axon.cmd</code> à nouveau, puis choisis ton dossier existant au premier lancement.</p>
+  <p>Comme n'importe quelle app : <b>Paramètres Windows → Applications → Applications installées → Axon → Désinstaller</b>. Le désinstallateur retire aussi Axon de Claude Desktop et Claude Code. <b>Ton cerveau (tes notes) n'est jamais supprimé.</b> Pour mettre à jour : lance simplement le nouvel <code>Axon-Setup.exe</code> par-dessus ; tes réglages et ton cerveau restent.</p>
 </main>
 </div>
 <script>

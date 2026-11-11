@@ -75,6 +75,7 @@ async function create() {
   } catch (e) { btn.disabled = false; btn.textContent = "Réessayer"; alert(e.message); }
 }
 $("#open").addEventListener("click", () => S.done());
+$("#guide").addEventListener("click", () => window.brain.guide());
 
 (async () => {
   state.info = await S.info();

@@ -2,13 +2,17 @@
 
 Axon transforme un dossier (dans ton **Google Drive** ou sur ton PC) en **mémoire persistante** que tes IA partagent : Claude d'abord, mais aussi Cursor, Codex, Gemini, ChatGPT. Toi, tu le vois en 3D. Tes IA y cherchent par le sens, lisent, écrivent, modifient tes **Excel, Word et PowerPoint** sur place — et ne suppriment jamais rien (archive + anciennes versions gardées).
 
-## Installer (Windows) — 3 minutes
-1. **Code → Download ZIP** sur cette page, puis clic droit → *Extraire tout…*
-2. Double-clic sur **`Installer Axon.cmd`** (Node.js est installé tout seul s'il manque).
+## Installer (Windows 10 et 11)
+1. Colonne de droite : **Releases** → télécharge **`Axon-Setup-1.0.0.exe`**.
+2. Double-clic dessus → assistant d'installation (choix du dossier → Installer → Terminer). Rien à taper, pas de terminal, **pas besoin de Node.js** : tout est dans l'installateur.
 3. Axon s'ouvre : ton **prénom** → ton **dossier** (Cloud = Google Drive, ou Personnel = ce PC) → tes **domaines de vie**. Le cerveau se crée dans ce dossier et **Claude est branché automatiquement**.
 4. Quitte Claude Desktop complètement (icône près de l'horloge → Quitter), rouvre-le et écris : `Appelle brain_demarrer`.
 
-Le guide complet (installation, connecteur, dépannage, cerveau à deux) : [`guide/index.html`](guide/index.html) — il s'ouvre aussi tout seul après l'installation.
+Désinstaller : Paramètres Windows → Applications → Axon (ton cerveau n'est jamais supprimé). Mettre à jour : lancer le nouveau Setup par-dessus.
+
+**Performances** : l'affichage du cerveau 3D utilise la carte graphique la plus puissante (sur un portable à deux puces : la NVIDIA/AMD, pas l'Intel) ; l'IA locale tourne sur le processeur par paquets (mesuré plus rapide que la carte graphique pour ce petit modèle). `Ctrl+K` → « Matériel utilisé » pour vérifier.
+
+Le guide complet (installation, connecteur, dépannage, cerveau à deux) : [`guide/index.html`](guide/index.html) — bouton « Ouvrir le guide » à la fin du premier lancement, ou `Ctrl+K` → Guide dans l'app.
 
 ## Ce que ça crée
 ```

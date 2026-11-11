@@ -9,7 +9,7 @@
 #  Ton cerveau (tes notes) n'est JAMAIS dans le dossier de l'app : on peut réinstaller l'app sans rien perdre.
 # =====================================================================================
 $ErrorActionPreference = "Stop"
-$source = Split-Path -Parent $PSScriptRoot
+$source = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $racine = Join-Path $env:USERPROFILE "Axon"
 $app = Join-Path $racine "app"
 
@@ -63,7 +63,7 @@ foreach ($lnk in @(([Environment]::GetFolderPath("Desktop") + "\Axon.lnk"), ([En
   $s = $sh.CreateShortcut($lnk); $s.TargetPath = $electron; $s.Arguments = '"' + $app + '"'; $s.WorkingDirectory = $app; $s.IconLocation = $ico; $s.Description = "Axon, ton second cerveau"; $s.Save()
 }
 Copy-Item (Join-Path $app "guide\index.html") (Join-Path $racine "Guide Axon.html") -Force
-Copy-Item (Join-Path $app "Desinstaller Axon.cmd") (Join-Path $racine "Desinstaller Axon.cmd") -Force
+Copy-Item (Join-Path $app "setupsans-installateurDesinstaller Axon.cmd") (Join-Path $racine "Desinstaller Axon.cmd") -Force
 Ok "Bureau + menu Démarrer + $racine\Guide Axon.html"
 
 # 5. Lancer

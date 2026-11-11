@@ -142,7 +142,7 @@ export function createBrain(el, { onSelect, onHover, onEmpty, onOpen }) {
   const colorFor = (n) => (n.kind === "ghost" ? "#8c93a3" : colorOf[groupKey(n)] || "#9aa3b5");
 
   // ---------- graphe ----------
-  const G = ForceGraph3D({ controlType: "orbit" })(el)
+  const G = ForceGraph3D({ controlType: "orbit", rendererConfig: { antialias: true, alpha: true, powerPreference: "high-performance" } })(el)
     .backgroundColor("rgba(0,0,0,0)")
     .showNavInfo(false)
     .nodeLabel(() => "") // infobulle maison (plus stable)

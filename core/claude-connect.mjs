@@ -35,14 +35,11 @@ export function desktopConfigs() {
   return [...out];
 }
 
-/** Le programme qui lance le serveur : Node s'il est installé, sinon Electron en mode Node. */
+/** Le programme qui lance le serveur. Dans l'app installée : Axon.exe lui-même (mode Node d'Electron) → aucun Node.js
+ *  à installer, et le branchement reste valable même si Node est désinstallé. Depuis la CLI : le Node qui l'exécute. */
 export function nodeCommand() {
-  if (!process.versions.electron) return { command: process.execPath, env: {} };
-  try {
-    const found = execFileSync(process.platform === "win32" ? "where" : "which", ["node"], { encoding: "utf8" }).split(/\r?\n/)[0].trim();
-    if (found) return { command: found, env: {} };
-  } catch { /* pas de Node dans le PATH */ }
-  return { command: process.execPath, env: { ELECTRON_RUN_AS_NODE: "1" } };
+  if (process.versions.electron) return { command: process.execPath, env: { ELECTRON_RUN_AS_NODE: "1" } };
+  return { command: process.execPath, env: {} };
 }
 
 const hasClaudeCli = () => { try { execFileSync(process.platform === "win32" ? "where" : "which", ["claude"], { stdio: "ignore" }); return true; } catch { return false; } };

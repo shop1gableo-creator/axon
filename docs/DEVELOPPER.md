@@ -2,6 +2,9 @@
 
 Prérequis : Node.js ≥ 20, Git, Windows / macOS / Linux. `npm install` puis `npm run build`.
 
+## Construire l'installateur Windows
+`npm run dist` → `dist-installer/Axon-Setup-<version>.exe` (electron-builder, NSIS : assistant, choix du dossier, raccourcis, désinstallation propre qui débranche Claude via `Axon.exe --debrancher`). Seules les dépendances utilisées côté Node sont dans `dependencies` (l'interface est empaquetée par esbuild : ses librairies sont en `devDependencies`). Publier : `gh release create vX.Y.Z dist-installer/Axon-Setup-X.Y.Z.exe`. Le script sans installateur (`setup/sans-installateur/`) reste pour les développeurs.
+
 ## Boucle de travail
 1. Créer un cerveau jetable : `node cli/brain.mjs init "%TEMP%/axon-test"`.
 2. Pointer dessus : `BRAIN_VAULT=<dossier>` (CLI, MCP, app). L'app ne mémorise pas un cerveau imposé par `BRAIN_VAULT`.

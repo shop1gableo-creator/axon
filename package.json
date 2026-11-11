@@ -1,7 +1,7 @@
 {
   "name": "axon",
   "productName": "Axon",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Axon : un second cerveau pour toi et tes IA (Claude, ChatGPT, Gemini…)",
   "main": "main.mjs",
   "scripts": {
@@ -12,13 +12,32 @@
     "cli": "node cli/brain.mjs",
     "connector": "node tools/build-connector.mjs",
     "init-cerveau": "node cli/brain.mjs init",
-    "test:office": "node tools/test-office.mjs"
+    "test:office": "node tools/test-office.mjs",
+    "dist": "npm run build && electron-builder --win nsis --publish never"
   },
   "keywords": [],
-  "author": "",
+  "author": "Axon",
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
+    "@huggingface/transformers": "^4.3.2",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "chokidar": "^6.0.0",
+    "exceljs": "^4.4.0",
+    "gray-matter": "^4.0.3",
+    "jszip": "^3.10.2",
+    "mammoth": "^1.13.0",
+    "minisearch": "^7.2.0",
+    "pdfjs-dist": "^6.5.438",
+    "simple-git": "^4.0.2",
+    "tesseract.js": "^7.0.0",
+    "xlsx": "^0.18.5",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.2",
+    "electron": "^45.2.3",
     "@codemirror/autocomplete": "^6.20.4",
     "@codemirror/commands": "^6.11.1",
     "@codemirror/lang-markdown": "^6.5.2",
@@ -33,60 +52,109 @@
     "@fontsource-variable/geist-mono": "^5.3.0",
     "@fontsource-variable/inter": "^5.3.0",
     "@fontsource/instrument-serif": "^5.3.0",
-    "@huggingface/transformers": "^4.3.2",
-    "@modelcontextprotocol/sdk": "^1.32.2",
     "3d-force-graph": "^1.80.2",
-    "chokidar": "^6.0.0",
     "d3": "^7.9.2",
     "dayjs": "^1.11.23",
     "defuddle": "^0.19.6",
     "diff": "^9.0.0",
     "dompurify": "^3.4.17",
-    "electron": "^45.2.3",
     "exifr": "^7.1.3",
     "force-graph": "^1.52.0",
     "fuzzysort": "^4.0.2",
-    "gray-matter": "^4.0.3",
     "gsap": "^3.15.1",
     "jsep": "^1.6.0",
-    "jszip": "^3.10.2",
     "katex": "^0.19.1",
     "linkedom": "^0.18.15",
     "lucide": "^1.72.0",
-    "mammoth": "^1.13.0",
     "markdown-it": "^15.0.3",
     "markdown-it-footnote": "^4.0.0",
     "markdown-it-mark": "^4.0.0",
     "markdown-it-task-lists": "^2.1.1",
     "mermaid": "^12.3.0",
-    "minisearch": "^7.2.0",
     "motion": "^14.12.0",
-    "pdfjs-dist": "^6.5.438",
     "rss-parser": "^3.13.0",
-    "simple-git": "^4.0.2",
     "sortablejs": "^1.15.7",
-    "tesseract.js": "^7.0.0",
     "three": "^0.187.0",
     "three-spritetext": "^1.10.0",
     "turndown": "^7.2.5",
     "wavesurfer.js": "^8.0.5",
-    "xlsx": "^0.18.5",
-    "yaml": "^2.9.1",
-    "zod": "^4.6.7",
-    "exceljs": "^4.4.0"
-  },
-  "devDependencies": {
-    "esbuild": "^0.28.2"
+    "yaml": "^2.9.1"
   },
   "allowScripts": {
     "electron": true,
     "esbuild": true,
     "onnxruntime-node": true,
     "protobufjs": true,
-    "tesseract.js": false
+    "tesseract.js": false,
+    "electron-winstaller": false
   },
   "bin": {
     "axon": "cli/brain.mjs"
   },
-  "private": true
+  "private": true,
+  "homepage": "https://github.com/shop1gableo-creator/axon",
+  "build": {
+    "appId": "app.axon.cerveau",
+    "productName": "Axon",
+    "copyright": "Axon",
+    "directories": {
+      "output": "dist-installer",
+      "buildResources": "build"
+    },
+    "asar": false,
+    "npmRebuild": false,
+    "files": [
+      "**/*",
+      "!dist-installer/**",
+      "!.models/**",
+      "!**/*.map",
+      "!docs/**",
+      "!tools/references/**",
+      "!setup/**",
+      "!.git/**",
+      "!node_modules/onnxruntime-node/bin/napi-v*/darwin/**",
+      "!node_modules/onnxruntime-node/bin/napi-v*/linux/**",
+      "!node_modules/onnxruntime-node/bin/napi-v*/win32/arm64/**",
+      "!node_modules/**/*.d.ts",
+      "!node_modules/**/*.md",
+      "!node_modules/**/test/**",
+      "!node_modules/**/tests/**",
+      "!node_modules/**/example/**",
+      "!node_modules/**/examples/**"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/axon.ico",
+      "executableName": "Axon"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Axon",
+      "installerIcon": "build/axon.ico",
+      "uninstallerIcon": "build/axon.ico",
+      "installerHeaderIcon": "build/axon.ico",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false,
+      "include": "build/installer.nsh",
+      "artifactName": "Axon-Setup-${version}.exe",
+      "language": "1036",
+      "installerLanguages": [
+        "fr_FR"
+      ],
+      "multiLanguageInstaller": false,
+      "uninstallDisplayName": "Axon"
+    }
+  }
 }

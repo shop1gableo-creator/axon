@@ -4,3 +4,4 @@ renderer/dist/
 *.log
 connector/server/
 connector/skills/
+dist-installer/

@@ -20,7 +20,7 @@ const refresh = async () => { await vault.scan(); };
 const text = (t) => ({ content: [{ type: "text", text: t }] });
 const find = (q) => vault.resolve(q) || vault.search(q, 1)[0]?.rel;
 
-const server = new McpServer({ name: "axon", title: "Axon", version: "0.7.0" }, {
+const server = new McpServer({ name: "axon", title: "Axon", version: "1.0.0" }, {
   instructions: "Axon : la mémoire externe persistante de ce cerveau (les humains, leur entreprise, leurs projets). Commence par brain_demarrer (ou brain_carte), puis brain_contexte ou brain_chercher. Après un travail important, écris une note (brain_ecrire) puis fais le rituel de fin de session (brain_cloture). Ne mets jamais de secret (mot de passe, clé) dans le Brain.",
 });
 

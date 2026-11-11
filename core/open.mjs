@@ -8,9 +8,8 @@ import { Semantic } from "./semantic.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const dataDir = path.join(process.env.APPDATA || path.join(os.homedir(), ".config"), "axon");
-// Les modèles d'IA locale sont rangés dans le dossier de l'app (pas dans AppData) : certains
-// environnements Windows (applications empaquetées) redirigent AppData, ce que le moteur ONNX refuse.
-export const modelsDir = path.resolve(here, "..", ".models");
+// Modèles d'IA locale (~300 Mo, téléchargés une fois) : %LOCALAPPDATA%\Axon\models — gardés lors des mises à jour.
+export const modelsDir = process.env.AXON_MODELS || path.join(process.env.LOCALAPPDATA || path.join(os.homedir(), ".cache"), "Axon", "models");
 
 export function settings() {
   try { return JSON.parse(fs.readFileSync(path.join(dataDir, "settings.json"), "utf8")); } catch { return {}; }
